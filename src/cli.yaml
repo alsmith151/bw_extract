@@ -10,6 +10,7 @@ args:
         about: Path to bigWig(s).
         takes_value: true
         required: true
+        multiple: true
     - regions:
         short: r
         long: regions
