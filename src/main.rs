@@ -30,7 +30,7 @@ fn extract_intervals(bed_fn: &str) -> Result<Vec<bed::Record>> {
 
     for record in bed_reader.records(){
 
-        let rec = record.expect("Error reading record.");
+        let rec = record.expect("Error reading record");
         records.push(rec);
     }
 
