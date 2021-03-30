@@ -13,6 +13,7 @@ use rayon::prelude::*;
 use polars::prelude::*;
 use std::fs::File;
 use std::path::Path;
+use std::collections::HashSet;
 
 
 fn mean(numbers: &Vec<f32>) -> f32 {
@@ -84,11 +85,7 @@ fn main() {
 
     // Get bed fn and bigwig fnames
     let bed_fn = matches.value_of("regions").unwrap();
-    let mut bw_fnames: Vec<&str> = matches.values_of("bigwigs").unwrap().collect();
-
-    // Series names cannot be duplicated
-    bw_fnames.sort();
-    bw_fnames.dedup();
+    let bw_fnames: HashSet<&str> = matches.values_of("bigwigs").unwrap().collect();
 
     // Get output fn
     let output_fn = matches.value_of("output").unwrap();
@@ -100,7 +97,7 @@ fn main() {
     // Extract mean values from each BigWig file
     println!("Extracting signal from BigWig files.");
     let region_means_series = bw_fnames.par_iter()
-                                       .progress()
+                                       .progress_count(bw_fnames.len() as u64)
                                        .map(|f| extract_mean_signal_for_regions(&bed_records, f).unwrap())
                                        .collect();
     
