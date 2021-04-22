@@ -100,6 +100,7 @@ fn main() {
                                        .progress_count(bw_fnames.len() as u64)
                                        .map(|f| extract_mean_signal_for_regions(&bed_records, f).unwrap())
                                        .collect();
+
     
     // Generate a dataframe for storage
     let mut df = DataFrame::new(region_means_series).unwrap();
